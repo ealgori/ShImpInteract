@@ -1,0 +1,107 @@
+Object.prototype.extend = function(obj) {
+   for (var i in obj) {
+	  if (obj.hasOwnProperty(i)) {
+		 this[i] = obj[i];
+	  }
+   }
+};
+
+
+function ShImportInteract()
+{
+		
+	this._getDocument = function(){
+		var frame = window.frames['iframe'];
+		if(frame)
+			return frame.contentDocument.getElementsByTagName("frame")[0].contentDocument;
+		else{
+			return  document;
+			}
+	};
+	
+	
+}
+
+var constsExtentions = {
+	selectSelector : "select.standardText",
+}
+
+
+var selectElExtentions = {
+	_selectEl : function(selector){
+		return this._getDocument().querySelectorAll(selector);
+	},
+
+	_selectElIndex : function(selector,index){
+		return this._selectEl()[index];
+	},
+}
+
+
+var selectShElExtentions={
+	getImportSelectList:function ()
+	{
+		return this._selectEl(this.selectSelector);
+	},
+	
+}
+
+var GetSetSelectExtentions={
+	_getSelIndex : function(el)
+	{
+		return el.selectedIndex;
+	},
+	_setSelIndex : function(el,val)
+	{
+		el.selectedIndex = val;
+	},
+	
+}
+
+var mainOperationsExtentions = {
+	// увеличить значения в указанном промежутке на единицу
+	increment : function(start,end, incr=1 )
+	{
+		var selects = this.getImportSelectList();
+		for (var i = 0; i < selects.length; i++) {
+			 var el = selects[i];
+			 var val = this._getSelIndex(el);
+		     if((val>=start)&&(val<=end))
+			 {
+				 this._setSelIndex(el,val+=incr);
+			 }
+		}
+	
+	},
+	
+	decrement : function(start,end, incr=1 )
+	{
+		var selects = this.getImportSelectList();
+		for (var i = 0; i < selects.length; i++) {
+			 var el = selects[i];
+			 var val = this._getSelIndex(el);
+			 if(val>=0)
+			 {
+				 if((val>=start)&&(val<=end))
+				 {
+					 this._setSelIndex(el,val-=incr);
+				 }
+			 }
+		}
+	
+	}
+}
+
+
+var interact = new ShImportInteract();
+interact.extend(constsExtentions);
+interact.extend(selectElExtentions);
+interact.extend(selectShElExtentions);
+interact.extend(GetSetSelectExtentions);
+interact.extend(mainOperationsExtentions);
+
+interact.increment(1,7);
+
+
+
+
