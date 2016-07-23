@@ -1,3 +1,5 @@
+'use strict'
+
 Object.prototype.extend = function(obj) {
    for (var i in obj) {
 	  if (obj.hasOwnProperty(i)) {
@@ -28,13 +30,15 @@ var constsExtentions = {
 
 
 var selectElExtentions = {
-	_selectEl : function(selector){
-		return this._getDocument().querySelectorAll(selector);
-	},
+	
+		_selectEl : function(selector){
+			return this._getDocument().querySelectorAll(selector);
+		},
 
-	_selectElIndex : function(selector,index){
-		return this._selectEl()[index];
-	},
+		_selectElIndex : function(selector,index){
+			return this._selectEl()[index];
+		},
+	
 }
 
 
@@ -60,7 +64,7 @@ var GetSetSelectExtentions={
 
 var mainOperationsExtentions = {
 	// увеличить значения в указанном промежутке на единицу
-	increment : function(start,end, incr=1 )
+	incrementN : function(start,end, incr=1 )
 	{
 		var selects = this.getImportSelectList();
 		for (var i = 0; i < selects.length; i++) {
@@ -74,7 +78,7 @@ var mainOperationsExtentions = {
 	
 	},
 	
-	decrement : function(start,end, incr=1 )
+	decrementN : function(start,end, incr=1 )
 	{
 		var selects = this.getImportSelectList();
 		for (var i = 0; i < selects.length; i++) {
@@ -89,18 +93,56 @@ var mainOperationsExtentions = {
 			 }
 		}
 	
+	},
+	increment : function(start,end, incr=1 )
+	{
+		var sRow= this._columnToNumber(start);
+		var eRow = this._columnToNumber(end);
+		this.incrementN(sRow,eRow);
+	},
+	decrement : function(start,end, incr=1 )
+	{
+		var sRow= this._columnToNumber(start);
+		var eRow = this._columnToNumber(end);
+		this.decrementN(sRow,eRow);
 	}
+	
 }
 
+var excelColumnMapExtentions = {
+	_columnToNumber : function(string)
+	{
+	string = string.toUpperCase();
+    var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', sum = 0, i;
+    for (i = 0; i < string.length; i++) {
+        sum += Math.pow(letters.length, i) * (letters.indexOf(string.substr(((i + 1) * -1), 1)) + 1);
+    }
+    return --sum; // align to select
+	},
+	_numberToColumn : function(num)
+	{
+		num--; // aling to select 
+		for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
+			ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
+		}
+		return ret;
+	}
+}
 
 var interact = new ShImportInteract();
 interact.extend(constsExtentions);
 interact.extend(selectElExtentions);
 interact.extend(selectShElExtentions);
 interact.extend(GetSetSelectExtentions);
+interact.extend(excelColumnMapExtentions);
 interact.extend(mainOperationsExtentions);
 
-interact.increment(1,7);
+//interact.increment(1,7);
+interact._numberToColumn(27); //AA
+interact._columnToNumber("AA"); //27
+interact.increment('L','M');
+
+
 
 
 
