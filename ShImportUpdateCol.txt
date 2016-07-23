@@ -25,16 +25,23 @@ function ShImportInteract()
 }
 
 var constsExtentions = {
-	selectSelector : "select.standardText",
+	_selectSelector : "select.standardText",
+	_tbodySelector : ".defTable > tbody:nth-child(1) > tr:nth-child(11) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)",
+	_tdSelector : "tr[style] > td:nth-child(2)"
+	
 }
 
 
 var selectElExtentions = {
 	
+		
 		_selectEl : function(selector){
 			return this._getDocument().querySelectorAll(selector);
 		},
-
+		_selectEl2 :function(el,selector)
+		{
+			return el.querySelectorAll(selector);
+		},
 		_selectElIndex : function(selector,index){
 			return this._selectEl()[index];
 		},
@@ -45,8 +52,23 @@ var selectElExtentions = {
 var selectShElExtentions={
 	getImportSelectList:function ()
 	{
-		return this._selectEl(this.selectSelector);
+		return this._selectEl(this._selectSelector);
 	},
+	getCaptionsForSelect:function()
+	{
+		var tbodySelector = ".defTable > tbody:nth-child(1) > tr:nth-child(11) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)";
+		var tdSelector = "tr[style] > td:nth-child(2)";
+		var tbody = this._selectEl(this._tbodySelector)[0];
+		var tdLabels = this._selectEl2(tbody,this._tdSelector);
+		var labels =[];
+		for (var i = 1; i < tdLabels.length; i++) {
+			labels.push(tdLabels[i].innerText);
+		}
+		
+		return labels;
+		
+		
+	}
 	
 }
 
@@ -64,7 +86,9 @@ var GetSetSelectExtentions={
 
 var mainOperationsExtentions = {
 	// увеличить значения в указанном промежутке на единицу
-	incrementN : function(start,end, incr=1 )
+		
+	
+	_incrementN : function(start,end, incr=1 )
 	{
 		var selects = this.getImportSelectList();
 		for (var i = 0; i < selects.length; i++) {
@@ -78,7 +102,7 @@ var mainOperationsExtentions = {
 	
 	},
 	
-	decrementN : function(start,end, incr=1 )
+	_decrementN : function(start,end, incr=1 )
 	{
 		var selects = this.getImportSelectList();
 		for (var i = 0; i < selects.length; i++) {
@@ -98,13 +122,23 @@ var mainOperationsExtentions = {
 	{
 		var sRow= this._columnToNumber(start);
 		var eRow = this._columnToNumber(end);
-		this.incrementN(sRow,eRow);
+		this._incrementN(sRow,eRow);
+		this.log();
 	},
 	decrement : function(start,end, incr=1 )
 	{
 		var sRow= this._columnToNumber(start);
 		var eRow = this._columnToNumber(end);
-		this.decrementN(sRow,eRow);
+		this._decrementN(sRow,eRow);
+		this.log();
+	},
+	clear : function(){
+		var selects = this.getImportSelectList();
+		for (var i = 0; i < selects.length; i++) {
+			var el = selects[i];
+			this._setSelIndex(el,-1);
+		}
+		
 	}
 	
 }
@@ -121,11 +155,29 @@ var excelColumnMapExtentions = {
 	},
 	_numberToColumn : function(num)
 	{
-		num--; // aling to select 
+		num++; // aling to select 
 		for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
 			ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
 		}
 		return ret;
+	}
+}
+
+var logExtention = {
+	log:function(){
+		var selects = this.getImportSelectList();
+		var labels = this.getCaptionsForSelect();
+		var result = [];
+		 for (var i = 0; i < selects.length; i++) {
+			var select = selects[i];
+			var selectVal = this._getSelIndex(select);
+			var selectCol = this._numberToColumn(selectVal);
+			var label = labels[i];
+			var log = {label:label, column:selectCol,index:selectVal};
+			result.push(log);
+			
+		 }
+		 console.table(result);
 	}
 }
 
@@ -135,12 +187,15 @@ interact.extend(selectElExtentions);
 interact.extend(selectShElExtentions);
 interact.extend(GetSetSelectExtentions);
 interact.extend(excelColumnMapExtentions);
+interact.extend(logExtention);
 interact.extend(mainOperationsExtentions);
 
 //interact.increment(1,7);
-interact._numberToColumn(27); //AA
-interact._columnToNumber("AA"); //27
-interact.increment('L','M');
+// interact._numberToColumn(27); //AA
+// interact._columnToNumber("AA"); //27
+// interact.increment('L','M');
+//interact.getCaptionsForSelect();
+interact.log();
 
 
 
