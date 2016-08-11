@@ -173,7 +173,7 @@ var logExtention = {
 			var selectVal = this._getSelIndex(select);
 			var selectCol = this._numberToColumn(selectVal);
 			var label = labels[i];
-			var log = {label:label, column:selectCol,index:selectVal};
+			var log = {del1:'|', label:label, del2:'|' column:selectCol};
 			result.push(log);
 			
 		 }
