@@ -179,6 +179,23 @@ var logExtention = {
 		 }
 		 console.table(result);
 	}
+	
+	log2:function(){
+		var selects = this.getImportSelectList();
+		var labels = this.getCaptionsForSelect();
+		var result = [];
+		 for (var i = 0; i < selects.length; i++) {
+			var select = selects[i];
+			var selectVal = this._getSelIndex(select);
+			var selectCol = this._numberToColumn(selectVal);
+			var label = labels[i];
+			var log = {label:label, column:selectCol};
+			console.log(log);
+			
+		 }
+		
+	}
+	
 }
 
 var interact = new ShImportInteract();
