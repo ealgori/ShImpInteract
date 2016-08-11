@@ -178,7 +178,7 @@ var logExtention = {
 			
 		 }
 		 console.table(result);
-	}
+	},
 	
 	log2:function(){
 		var selects = this.getImportSelectList();
