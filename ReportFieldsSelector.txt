@@ -1,0 +1,19 @@
+var frame = window.frames['iframe'];
+var select = frame.contentDocument.querySelector('[name="availprops"]');
+var evt = new Event('dblclick');
+
+var array1 = ["Region","Macroregion","Subcontractor SS &amp; SSR RL","Subcontractor PIR RL","R1 received Baseline","R1 received Actual","Request access for installation sent to Customer Actual","Access for installation granted Actual","SSR sent to Customer Actual","SSR approved by Customer Actual","Equipment received from warehouse Actual","Installation start Actual","SWAP Completed Actual","Request for acceptance sent to Customer Actual","List of deficiencies sent by Customer Actual","Equipment received from warehouse Baseline","BCR completed Baseline","BCR completed Actual","SSR approved Actual","SSR approved Baseline","Ready for visit Actual","Ready for visit Planned","Ready for visit Baseline","SRS comments","SRS test is compete, no issues identified Date","Site visit completed Actual","PIR approved Baseline","PIR approved Actual","Site survey access granted Actual","Initial Data Status Actual","Corrected SSR received from SubC Actual","Initial data for BCR received Actual","Eliminating deficiencies confirmed by Customer Actual","Site survey completed Actual","SSR received from SubC Actual","BCR received from SubC Actual","SanPassport sent to expertise Actual","EMI measurement requested from ASP Actual","Installation Completed Actual","Dismantled equipment delivered to a regional WH Actual","Defects are eliminated by ASP Actual","Acceptance documents signed by Customer Actual","Launch Year","SPO PIRSMR Status","List of def provided by ASP Act Actual","SPO SMRPIR sent Actual","SPO PIRSMR Signed actual","Deficiencies confirmed by Ericsson Actual","SWAP Completed Planned","Installation Checklist Responsible","Instal Checklist Control Resp","Checklist Installation provided Actual","Latitude","Longitude","Deficiencies eliminated &amp; submitted to Customer Actual","R2 received Actual","Status","Photo report Accepted","Installation Subcontractor RL","Act of dismantling sent to Customer Actual","Critical Defects","OHS date","QA Actual","R1 Subcontractor RL","R2 Status","R2 Subcontractor RL","Request for SS sent to Subcontractor Actual","SSR responsible DD","Installation leader","Installer 1","Installer 2","Installation Supervisor","Implementation Manager RL","Map (Yandex) Link","Initial Data Status DD","SS Visit report Status","SS Visit report Status Actual","SSR Status DD","SSR Status Actual","SSR approval flow DD","BCR required","BCR responsible DD","BCR Status DD","BCR Status Actual","BCR approval flow DD","R1 responsible","R1 status","R1 status Actual","R1 approval flow","R2 responsible","R2 Status Actual","R2 approval flow","Site Name","OHS index","Quality Index","Site Group","Corrected Site Survey report sent to Customer Actual","SSR received from Customer for correction Actual","PIR hardcopy sent to Customer Actual","BCR sent to Customer Actual","Archival project Status","SanPassport approved Actual","EMI protocol received Actual","Site Blocked","BCR Subcontractor RL","Reinforcement completed Actual","PIR sent to Customer Actual","Pre-acceptance certificate signed by Customer Actual","SSR sent to Customer Planned","PIR hardcopy sent to Customer Planned","BCR sent to Customer Planned","R1 received Planned"];
+
+
+array1.forEach(function(element) {
+  
+	var option = frame.contentDocument.querySelector(`[name="availprops"] > [title="${element}"]`);
+	if(!option){
+		console.error(element);
+	}
+	else{
+	option.selected = true;
+	}
+});
+select.dispatchEvent(evt);
+
